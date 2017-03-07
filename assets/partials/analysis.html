@@ -1,16 +1,16 @@
 <div class='container main dashboard-view {{ padded }}' ng-controller="ReportController">
     <div class="row">
         <div class='col-md-12'>
-            <h1>Dashboard</h1>
+            <h1>EdTech Automation Dashboard</h1>
         </div>
     </div>
-    
+
     <div class="row" ng-if="res.reports.length === 0">
         <div class="col-md-12">
             No tests.
         </div>
     </div>
-    
+
     <div class="row" ng-if="res.reports.length">
         <div class='col-md-6' ng-controller="TestTrendsController">
             <div class="panel panel-default padded">
@@ -20,17 +20,17 @@
                         <i class='fa fa-gear'></i>
                     </span>
                 </div>
-                
+
                 <div class='panel-body'>
                     <canvas id='test-trends' class='chart chart-line' chart-data="data" chart-labels="labels" chart-legend="true" chart-series="series" chart-options="options" chart-colours="colors"></canvas>
                 </div>
             </div>
         </div>
-        
+
         <div class='col-md-6' ng-controller="LogTrendsController">
             <div class='panel panel-default padded'>
                 <div class='panel-heading'>
-                    Report Trends By Status - Step 
+                    Report Trends By Status - Step
                     <span class='pull-right pointer' ng-controller='DataPointsController' ng-click='open()' href='#!'>
                         <i class='fa fa-gear'></i>
                     </span>
@@ -41,26 +41,26 @@
             </div>
         </div>
     </div>
-        
+
     <div class="row" ng-if="res.reports.length">
         <div class='col-lg-8 col-md-7'>
             <div class="panel panel-default padded">
                 <div class="panel-heading">
                     Reports (Last 5 Runs)
                 </div>
-                
-                <div class='panel-body'>
+
+                <div class='panel-body' >
                     <table class='table'>
-                        <thead>
-                            <th>#</th>
+                        <thead style="text-align:center">
+                            <th style="width: 50px">#</th>
                             <th>File</th>
                             <th>Start Time</th>
                             <th>End Time</th>
                             <th>Test Distribution</th>
-                            <th>Log Distribution</th>
+                            <th>Step Distribution</th>
                             <th></th>
                         </thead>
-                        <tbody>            
+                        <tbody>
                             <tr ng-repeat="report in res.reports track by $index" ng-if="$index < max" ng-init="testDist = getTestDistribution(report.id); logDist = getLogDistribution(report.id);">
                                 <td>{{ $index + 1 }}</td>
                                 <td><a href='#/reportDetails?id={{ res.reports[$index].id }}'>{{ res.reports[$index].fileName }}</a></td>
@@ -99,19 +99,19 @@
                 </div>
             </div>
         </div>
-        
+
         <div class='col-lg-4 col-md-5' ng-controller='TestAnalysisController'>
             <div class='panel panel-default padded inverted'>
                 <div class='panel-heading'>
                     Analysis (Last 5 Runs)
                 </div>
-                
+
                 <div class='panel-body'>
                     <div class='chart-box'>
                         <canvas id='dashboard-test-analysis' class='chart chart-doughnut' chart-data="data" chart-labels="labels" chart-legend="true" chart-options="options" chart-colours="colors"></canvas>
                     </div>
                 </div>
-                
+
                 <div class='ui segment-footer'>
                     <div class='text-small'><strong>{{ pass + fail + fatal + error + warning + skip + unknown }}</strong> tests, <strong>{{ pass }}</strong> passed</div>
                     <div class='text-small'><strong>{{ fail + fatal }}</strong> tests failed, <strong>{{ error + warning + skip + unknown}}</strong> others</div>
@@ -119,14 +119,14 @@
             </div>
         </div>
     </div>
-    
+
     <div class="row" ng-if="res.reports.length">
         <div class="col-md-4">
             <div class='panel panel-default padded'>
                 <div class='panel-heading'>
                     Top Passed
                 </div>
-                
+
                 <div class='panel-body'>
                     <table class='table'>
                         <thead>
@@ -145,13 +145,13 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-md-4">
             <div class='panel panel-default padded'>
                 <div class='panel-heading'>
                     Top Failed
                 </div>
-                
+
                 <div class='panel-body'>
                     <table class='table'>
                         <thead>
@@ -170,13 +170,13 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-md-4">
             <div class='panel panel-default padded'>
                 <div class='panel-heading'>
                     Categories
                 </div>
-                
+
                 <div class='panel-body'>
                     <table class='table'>
                         <thead>

@@ -10,12 +10,12 @@ var ObjectId = require('mongodb').ObjectID;
 module.exports = {
     archive: function(req, res) {
         var reportId = req.body.query;
-        
+
         // move all models to their archive
-        
+
         res.send(200);
     },
-    
+
     destroy: function(req, res) {
         var reportId = req.body.query;
 
@@ -25,17 +25,17 @@ module.exports = {
         Log.destroy({ report: reportId }).exec(function(err) {});
         Node.destroy({ report: reportId }).exec(function(err) {});
         Test.destroy({ report: reportId }).exec(function(err) {});
-        
+
         res.send(200);
     },
-       
+
     aggregates: function(req, res) {
         var project = { $ne: null };
-        if (typeof req.session.project !== 'undefined' && req.session.project != null) 
+        if (typeof req.session.project !== 'undefined' && req.session.project != null)
             project = req.session.project;
 
         // system default data-points
-        var trendDataPoints = 5,
+        var trendDataPoints = 30,
             trendDataPointFormat = 'long-dt';
         // override data-points if admin has set this value globally
         Settings.findOne({ name: 'trendDataPoints' }).exec(function(err, result) {
@@ -55,7 +55,7 @@ module.exports = {
 
         Project.find({ name: project }).exec(function(err, projects) {
             if (projects.length && projects.length === 1) project = projects[0].id;
-            
+
             Report.find({ project: project }).sort({ startTime: 'desc' }).exec(function(err, result) {
                 if (err) console.log(err);
 
@@ -63,7 +63,7 @@ module.exports = {
                 var testDistribution = [], logDistribution = [];
                 var categories = [];
                 var topPassed = [], topFailed = [];
-                
+
                 var projects = null;
 
                 var view = function view() {
@@ -98,14 +98,14 @@ module.exports = {
 
                 // list all projects
                 Project.getProjects(function(p) { projects = p });
-                
+
                 // list all categories
                 Category.getNames(function(cats) { categories = cats; })
-                
+
                 // top passed tests
                 Test.getGroupsWithCounts({ status: { $in: ['pass'] }}, { status: '$status', name: '$name' }, { count: -1 }, 10, function(e) {
                     topPassed = e;
-                    
+
                     // top failed tests
                     Test.getGroupsWithCounts({ status: { $in: ['fail', 'fatal'] }}, { status: '$status', name: '$name' }, { count: -1 }, 10, function(e) {
                         topFailed = e;
@@ -157,7 +157,7 @@ module.exports = {
 
                 var itemsToIterate = result.length;
 
-                for (var ix = 0; ix < result.length; ix++) {                    
+                for (var ix = 0; ix < result.length; ix++) {
                     Report.getDistribution(result[ix].id, function(dist) {
                         testDistribution.push(dist.testDistribution);
                         logDistribution.push(dist.logDistribution);
@@ -173,12 +173,12 @@ module.exports = {
 
     details: function(req, res) {
         req.query = req.body.query;
-        
+
         Test.find({ report: req.query.id }).populateAll().exec(function(err, result) {
             if (err) console.log(err);
 
             var out = [];
-            
+
             var sendRes = function() {
                 res.json(out);
             };
@@ -187,28 +187,28 @@ module.exports = {
                 if (nodeArray.length === 0) cb(nodeArray);
 
                 var itemsToIterateIn = nodeArray.length;
-                
+
                 for (var ix = 0; ix < nodeArray.length; ix++) {
                     (function(ix) {
                         Log.getLogs({ test: nodeArray[ix].id }, function(logs) {
                             nodeArray[ix].logs = logs;
-                            
+
                             if (--itemsToIterateIn === 0) cb(nodeArray);
                         });
                     })(ix);
                 }
             }
-            
+
             var itemsToIterate = result.length;
-            
+
             for (var ix = 0; ix < result.length; ix++) {
                 (function(ix) {
                     out[ix] = result[ix].toJSON();
-                    
+
                     if (result[ix].nodes.length > 0) {
                         getNodesWithLogs(result[ix].toJSON().nodes, function(nodes) {
                             out[ix].nodes = nodes;
-                            
+
                             (--itemsToIterate === 0) && sendRes();
                         });
                     }
@@ -220,4 +220,3 @@ module.exports = {
         })
     }
 };
-
