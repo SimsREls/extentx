@@ -14,4 +14,6 @@ EXPOSE 1337
 
 RUN npm install
 
-CMD ["mongoUser=$MONGOUSER", "mongoPassword=$MONGOPASSWD", "./node_modules/.bin/sails", "lift"]
+WORKDIR /usr/src/app/extentx/node_modules/.bin
+
+CMD mongoUser=$MONGOUSER mongoPassword=$MONGOPASSWD sails lift
