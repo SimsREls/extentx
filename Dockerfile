@@ -4,8 +4,7 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 RUN apk add --no-cache git
-RUN git clone git@github.com:SimsREls/extentx.git &&
-git checkout docker
+RUN git clone https://github.com/SimsREls/extentx.git
 
 WORKDIR /usr/src/app/extentx
 
