@@ -14,4 +14,4 @@ EXPOSE 1337
 
 RUN npm install
 
-CMD ["./node_modules/.bin/sails", "lift"]
+CMD ["mongoUser=$MONGOUSER", "mongoPassword=$MONGOPASSWD", "./node_modules/.bin/sails", "lift"]
