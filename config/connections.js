@@ -61,8 +61,8 @@ module.exports.connections = {
     host: 'mongodb', // host where MongoDB is running
     port: 27017, // port where MongoDB is running
     database: 'extent',
-    user: process.env.mongoUser,
-    password: process.env.mongoPassword
+    user: 'userAEB',
+    password: 'lOnPMLxnEvDUuarD' 
   },
 
   /***************************************************************************
