@@ -12,6 +12,7 @@ WORKDIR /usr/src/app/extentx
 
 EXPOSE 1337
 
-RUN npm install
+RUN npm install && \
+npm update orm
 
 CMD ["./node_modules/.bin/sails", "lift"]
