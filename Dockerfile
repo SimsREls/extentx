@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 CMD apt-get -y install git 
 
 RUN rm -rf extentx && \ 
-git clone -b docker https://github.com/SimsREls/extentx.git && \
+git clone -b moredatapoints https://github.com/SimsREls/extentx.git && \
 cd extentx 
 
 WORKDIR /usr/src/app/extentx
